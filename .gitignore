@@ -1,0 +1,16 @@
+.vs/
+MP.WindowsServices.CentralServerNotifyer/bin/
+MP.WindowsServices.CentralServerNotifyer/obj/
+MP.WindowsServices.Common/bin/
+MP.WindowsServices.Common/obj/
+MP.WindowsServices.DependencyResolver/bin/
+MP.WindowsServices.DependencyResolver/obj/
+MP.WindowsServices.FileStorageObserver/bin/
+MP.WindowsServices.FileStorageObserver/obj/
+MP.WindowsServices.ImagesManager/bin/
+MP.WindowsServices.ImagesManager/obj/
+MP.WindowsServices.ServiceInstance/bin/
+MP.WindowsServices.ServiceInstance/obj/
+MP.WindowsServices.WorkflowBuilder/bin/
+MP.WindowsServices.WorkflowBuilder/obj/
+packages/
