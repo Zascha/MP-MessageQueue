@@ -11,7 +11,7 @@ namespace MP.WindowsServices.ImagesManager.ImagesBatchHandlers
 {
     public class PdfImagesBatchHandler : IImagesBatchHandler
     {
-        private const string PdfDocumentsDirectoryName = "PdfDocuments";
+        private const string PdfDocumentsDirectoryName = "TempPdfDocuments";
         private const string PdfExtention = ".pdf";
 
         private readonly IPdfGenerator _pdfGenerator;

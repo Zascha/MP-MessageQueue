@@ -66,5 +66,16 @@ namespace MP.WindowsServices.Common.FileSystemHelpers
 
             return File.ReadAllBytes(filePath);
         }
+
+        public void WriteBytesToFile(string filePath, byte[] fileData)
+        {
+            if (string.IsNullOrEmpty(filePath))
+                throw new ArgumentNullException(nameof(filePath));
+
+            using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+                fs.Write(fileData, 0, fileData.Length);
+            }
+        }
     }
 }

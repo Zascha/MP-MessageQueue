@@ -21,7 +21,7 @@
 
         private ServiceStateInfo()
         {
-            ServiceStateSendTimeoutLimit = 10000;
+            ServiceStateSendTimeoutLimit = 5000;
         }
 
         public ServiceState ServiceState { get;  set; }

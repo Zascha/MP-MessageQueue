@@ -12,6 +12,8 @@
 
         byte[] GetFileBytes(string filePath);
 
+        void WriteBytesToFile(string filePath, byte[] fileData);
+
         void DeleteFile(string filePath);
     }
 }

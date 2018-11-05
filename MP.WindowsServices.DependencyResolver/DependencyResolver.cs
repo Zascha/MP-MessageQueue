@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MP.WindowsServices.CentralServerListener;
 using MP.WindowsServices.CentralServerNotify;
 using MP.WindowsServices.Common;
 using MP.WindowsServices.Common.FileSystemHelpers;
@@ -44,6 +45,10 @@ namespace MP.WindowsServices.DependencyResolver
             builder.RegisterType<RabbitMQPublisher<ServiceStateInfo>>().As<IPublisher<ServiceStateInfo>>()
                                                                        .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeServiceStateInfoName);
 
+            builder.RegisterType<RabbitMQSubscriber<FileBatchMessage>>().As<ISubscriber<FileBatchMessage>>()
+                                                                       .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeBatchesToProceedName);
+
+            builder.RegisterType<ImagesBatchSubscriber>().As<IImagesBatchSubscriber>();
             builder.RegisterType<CentralServerNotifyer>().As<ICentralServerNotifyer>();
 
             builder.RegisterType<MigraDocPdfGenerator>().As<IPdfGenerator>();

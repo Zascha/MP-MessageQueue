@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1793BF86-D38B-4D35-9290-23D1ED8B3987}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MP.WindowsServices.DependencyResolver</RootNamespace>
-    <AssemblyName>MP.WindowsServices.DependencyResolver</AssemblyName>
+    <ProjectGuid>{C3D3C9CB-D7D4-44A4-9DB6-18BDEF4A85FC}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MP.WindowsServices.CentralServer</RootNamespace>
+    <AssemblyName>MP.WindowsServices.CentralServer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,40 +45,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyResolver.cs" />
+    <Compile Include="CentralServerInstance.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MP\MessageQueue\MP.WindowsServices.MQManager\MP.WindowsServices.MQManager.csproj">
-      <Project>{60F4F646-1BA7-4166-B712-97E09D6FE021}</Project>
-      <Name>MP.WindowsServices.MQManager</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MP.WindowsServices.CentralServerListener\MP.WindowsServices.CentralServerListener.csproj">
       <Project>{1ca739cb-4997-4ad5-8241-f10ca05906f6}</Project>
       <Name>MP.WindowsServices.CentralServerListener</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MP.WindowsServices.CentralServerNotifyer\MP.WindowsServices.CentralServerNotifyer.csproj">
-      <Project>{D21BDE45-9D30-4D30-A3B6-D22F6C6FD01A}</Project>
-      <Name>MP.WindowsServices.CentralServerNotifyer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MP.WindowsServices.WorkflowBuilder\MP.WindowsServices.WorkflowBuilder.csproj">
-      <Project>{238a89a5-2a87-4c75-8bc0-4ae371d0829b}</Project>
-      <Name>MP.WindowsServices.WorkflowBuilder</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MP.WindowsServices.Common\MP.WindowsServices.Common.csproj">
-      <Project>{def86286-52f8-40a2-8bb1-68ff9a4887cb}</Project>
-      <Name>MP.WindowsServices.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MP.WindowsServices.FileStorageObserver\MP.WindowsServices.FileStorageObserver.csproj">
-      <Project>{ee8dd145-7129-4057-99f4-0acc72526af0}</Project>
-      <Name>MP.WindowsServices.FileStorageObserver</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MP.WindowsServices.ImagesManager\MP.WindowsServices.ImagesManager.csproj">
-      <Project>{18c908cb-0402-4cfb-bb66-b4323afb859e}</Project>
-      <Name>MP.WindowsServices.ImagesManager</Name>
+    <ProjectReference Include="..\MP.WindowsServices.DependencyResolver\MP.WindowsServices.DependencyResolver.csproj">
+      <Project>{1793BF86-D38B-4D35-9290-23D1ED8B3987}</Project>
+      <Name>MP.WindowsServices.DependencyResolver</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

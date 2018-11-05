@@ -1,1 +1,0 @@
-MP.WindowsServices.ServiceInstance\bin\Debug\MP.WindowsServices.ServiceInstance.exe uninstall --sudo

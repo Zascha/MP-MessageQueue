@@ -14,3 +14,7 @@ MP.WindowsServices.ServiceInstance/obj/
 MP.WindowsServices.WorkflowBuilder/bin/
 MP.WindowsServices.WorkflowBuilder/obj/
 packages/
+MP.WindowsServices.CentralServer/bin/
+MP.WindowsServices.CentralServer/obj/
+MP.WindowsServices.CentralServerListener/bin/
+MP.WindowsServices.CentralServerListener/obj/

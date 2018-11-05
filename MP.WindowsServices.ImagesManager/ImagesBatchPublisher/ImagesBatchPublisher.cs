@@ -35,6 +35,8 @@ namespace MP.WindowsServices.ImagesManager.ImagesBatchPublisher
                 {
                     _publisher.Publish(fileMessage);
                 }
+
+                _fileSystemHelper.FileHelper.DeleteFile(args.FilePath);
             }
 
             OnStepExecuted(this, args);
