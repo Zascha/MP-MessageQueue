@@ -18,3 +18,5 @@ MP.WindowsServices.CentralServer/bin/
 MP.WindowsServices.CentralServer/obj/
 MP.WindowsServices.CentralServerListener/bin/
 MP.WindowsServices.CentralServerListener/obj/
+MP.WindowsServices.MQManager/bin/
+MP.WindowsServices.MQManager/obj/
