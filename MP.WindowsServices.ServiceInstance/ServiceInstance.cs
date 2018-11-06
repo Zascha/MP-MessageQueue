@@ -33,7 +33,7 @@ namespace MP.WindowsServices.ServiceInstance
 
         private void RunService()
         {
-            _scope.Resolve<ICentralServerNotifyer>().StartNotify();
+            //_scope.Resolve<ICentralServerNotifyer>().StartNotify();
 
             var pdfConvertionStep = _scope.Resolve<IImagesBatchHandler>();
             var publishingStep = _scope.Resolve<IImagesBatchPublisher>();

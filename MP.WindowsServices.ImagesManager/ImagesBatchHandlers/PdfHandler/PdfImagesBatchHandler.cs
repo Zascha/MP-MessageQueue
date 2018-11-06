@@ -1,5 +1,4 @@
 ﻿using MP.WindowsServices.Common;
-using MP.WindowsServices.Common.Interfaces;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;

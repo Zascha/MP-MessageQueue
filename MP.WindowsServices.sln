@@ -15,13 +15,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP.WindowsServices.Dependen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP.WindowsServices.ServiceInstance", "MP.WindowsServices.ServiceInstance\MP.WindowsServices.ServiceInstance.csproj", "{0DD18A9B-5BB9-435E-A1FC-3C2E4C9BC3D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP.WindowsServices.MQManager", "..\MP\MessageQueue\MP.WindowsServices.MQManager\MP.WindowsServices.MQManager.csproj", "{60F4F646-1BA7-4166-B712-97E09D6FE021}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP.WindowsServices.MQManager", "MP.WindowsServices.MQManager\MP.WindowsServices.MQManager.csproj", "{60F4F646-1BA7-4166-B712-97E09D6FE021}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP.WindowsServices.CentralServerNotifyer", "MP.WindowsServices.CentralServerNotifyer\MP.WindowsServices.CentralServerNotifyer.csproj", "{D21BDE45-9D30-4D30-A3B6-D22F6C6FD01A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP.WindowsServices.CentralServer", "MP.WindowsServices.CentralServer\MP.WindowsServices.CentralServer.csproj", "{C3D3C9CB-D7D4-44A4-9DB6-18BDEF4A85FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP.WindowsServices.CentralServerListener", "MP.WindowsServices.CentralServerListener\MP.WindowsServices.CentralServerListener.csproj", "{1CA739CB-4997-4AD5-8241-F10CA05906F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{295BB3EF-B203-4DC3-BD53-41B819F7A821}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{4B930AC7-CC80-44E2-9AAC-75E09922CCE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CentralServer", "CentralServer", "{64ED50EC-2E40-47D2-867D-EC4026C50C40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +78,18 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE8DD145-7129-4057-99F4-0ACC72526AF0} = {4B930AC7-CC80-44E2-9AAC-75E09922CCE8}
+		{DEF86286-52F8-40A2-8BB1-68FF9A4887CB} = {295BB3EF-B203-4DC3-BD53-41B819F7A821}
+		{18C908CB-0402-4CFB-BB66-B4323AFB859E} = {4B930AC7-CC80-44E2-9AAC-75E09922CCE8}
+		{238A89A5-2A87-4C75-8BC0-4AE371D0829B} = {4B930AC7-CC80-44E2-9AAC-75E09922CCE8}
+		{1793BF86-D38B-4D35-9290-23D1ED8B3987} = {295BB3EF-B203-4DC3-BD53-41B819F7A821}
+		{0DD18A9B-5BB9-435E-A1FC-3C2E4C9BC3D0} = {4B930AC7-CC80-44E2-9AAC-75E09922CCE8}
+		{60F4F646-1BA7-4166-B712-97E09D6FE021} = {295BB3EF-B203-4DC3-BD53-41B819F7A821}
+		{D21BDE45-9D30-4D30-A3B6-D22F6C6FD01A} = {4B930AC7-CC80-44E2-9AAC-75E09922CCE8}
+		{C3D3C9CB-D7D4-44A4-9DB6-18BDEF4A85FC} = {64ED50EC-2E40-47D2-867D-EC4026C50C40}
+		{1CA739CB-4997-4AD5-8241-F10CA05906F6} = {64ED50EC-2E40-47D2-867D-EC4026C50C40}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7DD42EF8-29EC-431A-B76E-0814985BE38F}

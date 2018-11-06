@@ -45,7 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MP\MessageQueue\MP.WindowsServices.MQManager\MP.WindowsServices.MQManager.csproj">
+    <ProjectReference Include="..\MP.WindowsServices.MQManager\MP.WindowsServices.MQManager.csproj">
       <Project>{60f4f646-1ba7-4166-b712-97e09d6fe021}</Project>
       <Name>MP.WindowsServices.MQManager</Name>
     </ProjectReference>
