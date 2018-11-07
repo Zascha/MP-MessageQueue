@@ -62,7 +62,11 @@
     <Compile Include="FileSystemHelpers\LocalFileSystemHelper.cs" />
     <Compile Include="IWorkflowStepExecutor.cs" />
     <Compile Include="FileStoragePipelineEventArgs.cs" />
+    <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SafeExecuteManagers\ISafeExecuteManager.cs" />
+    <Compile Include="SafeExecuteManagers\SafeExecuteManager.cs" />
     <Compile Include="ServiceStateInfo.cs" />
   </ItemGroup>
   <ItemGroup>

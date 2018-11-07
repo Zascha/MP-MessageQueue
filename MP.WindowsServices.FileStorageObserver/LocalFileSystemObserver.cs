@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MP.WindowsServices.Common;
 using MP.WindowsServices.Common.FileSystemHelpers.Interfaces;
+using MP.WindowsServices.Common.SafeExecuteManagers;
 using MP.WindowsServices.FileStorageObserver.Helpers;
 using MP.WindowsServices.FileStorageObserver.Interfaces;
 
@@ -10,6 +11,7 @@ namespace MP.WindowsServices.FileStorageObserver
 {
     public class LocalFileSystemObserver : IFileStorageObserver
     {
+        private readonly ISafeExecuteManager _safeExecuteManager;
         private readonly IFileSystemHelper _fileSystemHelper;
         private readonly AppConfigHelper _appConfigHelper;
 
@@ -17,8 +19,9 @@ namespace MP.WindowsServices.FileStorageObserver
 
         public event EventHandler<FileStoragePipelineEventArgs> FileAdded;
 
-        public LocalFileSystemObserver(IFileSystemHelper fileSystemHelper)
+        public LocalFileSystemObserver(ISafeExecuteManager safeExecuteManager, IFileSystemHelper fileSystemHelper)
         {
+            _safeExecuteManager = safeExecuteManager ?? throw new ArgumentNullException(nameof(safeExecuteManager));
             _fileSystemHelper = fileSystemHelper ?? throw new ArgumentNullException(nameof(fileSystemHelper));
 
             _appConfigHelper = new AppConfigHelper();
@@ -28,7 +31,7 @@ namespace MP.WindowsServices.FileStorageObserver
 
         public void ObserverAndProceedExistingFiles()
         {
-            ServiceStateInfo.GetInstance().ServiceState = ServiceState.IsWaitingForNewFiles;
+            ServiceStateInfo.Instance.UpdateState(ServiceState.IsWaitingForNewFiles);
 
             foreach (var path in _appConfigHelper.ObservableFolders)
             {
@@ -54,10 +57,11 @@ namespace MP.WindowsServices.FileStorageObserver
         /// </summary>
         private void InitFileSystemWatchersDictionary()
         {
-            ServiceStateInfo.GetInstance().ServiceState = ServiceState.IsWaitingForNewFiles;
+            ServiceStateInfo.Instance.UpdateState(ServiceState.IsWaitingForNewFiles);
 
             _fileSystemWatchers = new List<FileSystemWatcher>();
 
+            _safeExecuteManager.ExecuteWithExceptionLogging(() =>
             {
                 foreach (var path in _appConfigHelper.ObservableFolders)
                 {
@@ -72,7 +76,7 @@ namespace MP.WindowsServices.FileStorageObserver
 
                     _fileSystemWatchers.Add(watcher);
                 }
-            }
+            });
         }
 
         private void OnFileAdded(object sender, FileSystemEventArgs e)

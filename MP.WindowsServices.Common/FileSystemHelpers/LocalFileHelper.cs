@@ -72,6 +72,12 @@ namespace MP.WindowsServices.Common.FileSystemHelpers
             if (string.IsNullOrEmpty(filePath))
                 throw new ArgumentNullException(nameof(filePath));
 
+            var directory = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write))
             {
                 fs.Write(fileData, 0, fileData.Length);

@@ -62,6 +62,10 @@
       <Project>{1793BF86-D38B-4D35-9290-23D1ED8B3987}</Project>
       <Name>MP.WindowsServices.DependencyResolver</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MP.WindowsServices.MQManager\MP.WindowsServices.MQManager.csproj">
+      <Project>{60F4F646-1BA7-4166-B712-97E09D6FE021}</Project>
+      <Name>MP.WindowsServices.MQManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

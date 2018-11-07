@@ -77,6 +77,10 @@
       <Project>{D21BDE45-9D30-4D30-A3B6-D22F6C6FD01A}</Project>
       <Name>MP.WindowsServices.CentralServerNotifyer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MP.WindowsServices.MQManager\MP.WindowsServices.MQManager.csproj">
+      <Project>{60F4F646-1BA7-4166-B712-97E09D6FE021}</Project>
+      <Name>MP.WindowsServices.MQManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MP.WindowsServices.WorkflowBuilder\MP.WindowsServices.WorkflowBuilder.csproj">
       <Project>{238a89a5-2a87-4c75-8bc0-4ae371d0829b}</Project>
       <Name>MP.WindowsServices.WorkflowBuilder</Name>

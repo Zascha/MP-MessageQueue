@@ -54,7 +54,10 @@
     <Compile Include="FileMessageFactory\FilePatchMessageFactory.cs" />
     <Compile Include="Messages\FileBatchMessage.cs" />
     <Compile Include="FileMessageFactory\IFilePatchMessageFactory.cs" />
+    <Compile Include="Messages\ServiceStateInfoMessage.cs" />
+    <Compile Include="Messages\UpdateStateInfoMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RabbitMQChannel.cs" />
     <Compile Include="RabbitMQConsts.cs" />
     <Compile Include="RabbitMQPublisher.cs" />
     <Compile Include="RabbitMQSubscriber.cs" />

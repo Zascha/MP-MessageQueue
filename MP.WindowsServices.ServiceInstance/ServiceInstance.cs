@@ -3,6 +3,7 @@ using MP.WindowsServices.CentralServerNotify;
 using MP.WindowsServices.Common.Interfaces;
 using MP.WindowsServices.FileStorageObserver.Interfaces;
 using MP.WindowsServices.ImagesManager.Interfaces;
+using MP.WindowsServices.MQManager;
 using MP.WindowsServices.ProcessingBuilder;
 using MP.WindowsServices.ProcessingBuilder.Extentions;
 using System.Collections.Generic;
@@ -33,8 +34,6 @@ namespace MP.WindowsServices.ServiceInstance
 
         private void RunService()
         {
-            //_scope.Resolve<ICentralServerNotifyer>().StartNotify();
-
             var pdfConvertionStep = _scope.Resolve<IImagesBatchHandler>();
             var publishingStep = _scope.Resolve<IImagesBatchPublisher>();
             var workflowBuilder = _scope.Resolve<IFileStorageWorkflowBuilder>();
@@ -43,12 +42,15 @@ namespace MP.WindowsServices.ServiceInstance
             {
                 new List<IWorkflowStepExecutor> { pdfConvertionStep, publishingStep }.ToWorkflowStepChain()
             });
+
+            _scope.Resolve<ICentralServerNotifyer>().StartNotify();
         }
 
         private void StopService()
         {
             _scope.Resolve<IFileStorageObserver>().StopObserving();
             _scope.Resolve<ICentralServerNotifyer>().StopNotify();
+            _scope.Resolve<RabbitMQChannel>().Dispose();
         }
 
         #endregion

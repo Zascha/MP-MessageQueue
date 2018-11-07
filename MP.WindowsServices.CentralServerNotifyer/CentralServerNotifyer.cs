@@ -1,5 +1,7 @@
 ﻿using MP.WindowsServices.Common;
+using MP.WindowsServices.Common.SafeExecuteManagers;
 using MP.WindowsServices.MQManager;
+using MP.WindowsServices.MQManager.Messages;
 using System;
 using System.Timers;
 
@@ -7,25 +9,39 @@ namespace MP.WindowsServices.CentralServerNotify
 {
     public class CentralServerNotifyer : ICentralServerNotifyer
     {
-        private readonly IPublisher<ServiceStateInfo> _publisher;
+        private readonly ISafeExecuteManager _safeExecuteManager;
+        private readonly IPublisher<ServiceStateInfoMessage> _publisher;
+        private readonly ISubscriber<UpdateStateInfoMessage> _subscriber;
         private Timer _observingTimer;
 
-        public CentralServerNotifyer(IPublisher<ServiceStateInfo> publisher)
+        public CentralServerNotifyer(ISafeExecuteManager safeExecuteManager,
+                                     IPublisher<ServiceStateInfoMessage> publisher,
+                                     ISubscriber<UpdateStateInfoMessage> subscriber)
         {
+            _safeExecuteManager = safeExecuteManager ?? throw new ArgumentNullException(nameof(safeExecuteManager));
             _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
+            _subscriber = subscriber ?? throw new ArgumentNullException(nameof(subscriber));
+
             _observingTimer = new Timer();
-            _observingTimer.Interval = ServiceStateInfo.GetInstance().ServiceStateSendTimeoutLimit;
-            _observingTimer.Start();
+            _observingTimer.Interval = ServiceStateInfo.Instance.ServiceSendTimeoutLimit;
+            _observingTimer.Elapsed += OnTimerElapsed;
         }
 
         public void StartNotify()
         {
-            _observingTimer.Elapsed += OnTimerElapsed;
+            _safeExecuteManager.ExecuteWithExceptionLogging(() =>
+            {
+                _observingTimer.Start();
+                _subscriber.Receive(SetReceivedSettings);
+            });
         }
 
         public void StopNotify()
         {
-            _observingTimer.Elapsed -= OnTimerElapsed;
+            _safeExecuteManager.ExecuteWithExceptionLogging(() =>
+            {
+                _observingTimer.Stop();
+            });
         }
 
         public void SetCentralServerNotifyerTimerLimit(int timerLimitInSeconds)
@@ -47,10 +63,18 @@ namespace MP.WindowsServices.CentralServerNotify
 
         private void OnTimerElapsed(object source, ElapsedEventArgs e)
         {
-            _publisher.Publish(ServiceStateInfo.GetInstance());
+            _publisher.Publish(new ServiceStateInfoMessage
+            {
+                ServiceStateInfo = ServiceStateInfo.Instance,
+                StateTime = DateTime.UtcNow
+            });
+        }
+
+        private void SetReceivedSettings(UpdateStateInfoMessage message)
+        {
+            ServiceStateInfo.Instance.UpdateSendTimeoutLimit(message.ServiceSendTimeoutLimit);
         }
 
         #endregion
-
     }
 }

@@ -9,9 +9,11 @@ namespace MP.WindowsServices.MQManager
     public class RabbitMQPublisher<T> : IPublisher<T>
     {
         private readonly string _exchangeName;
+        private readonly RabbitMQChannel _channel;
 
-        public RabbitMQPublisher(string exchangeName)
+        public RabbitMQPublisher(RabbitMQChannel channel, string exchangeName)
         {
+            _channel = channel ?? throw new ArgumentNullException(nameof(channel));
             _exchangeName = !string.IsNullOrEmpty(exchangeName) ? exchangeName : throw new ArgumentNullException(nameof(exchangeName));
         }
 
@@ -22,18 +24,14 @@ namespace MP.WindowsServices.MQManager
 
         public Task PublishAsync(T message)
         {
-            return Task.Run(() =>
+            return Task.Run(() => 
             {
-                var factory = new ConnectionFactory() { HostName = RabbitMQConsts.Host};
-                using (var connection = factory.CreateConnection())
-                using (var channel = connection.CreateModel())
-                {
-                    channel.ExchangeDeclare(exchange: _exchangeName, type: ExchangeType.Fanout.ToString().ToLower());
+                _channel.Channel.ExchangeDeclare(exchange: _exchangeName, type: ExchangeType.Fanout.ToString().ToLower());
 
-                    var body = Encoding.UTF8.GetBytes(SerializeFilePatchMessage(message));
+                var body = Encoding.UTF8.GetBytes(SerializeFilePatchMessage(message));
 
-                    channel.BasicPublish(exchange: _exchangeName, routingKey: "", basicProperties: null, body: body);
-                }
+                _channel.Channel.BasicPublish(exchange: _exchangeName, routingKey: "", basicProperties: null, body: body);
+
             });
         }
 

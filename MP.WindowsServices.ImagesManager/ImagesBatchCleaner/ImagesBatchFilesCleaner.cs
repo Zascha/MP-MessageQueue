@@ -1,5 +1,6 @@
 ﻿using MP.WindowsServices.Common;
 using MP.WindowsServices.Common.FileSystemHelpers.Interfaces;
+using MP.WindowsServices.Common.SafeExecuteManagers;
 using MP.WindowsServices.ImagesManager.Interfaces;
 using System;
 using System.Linq;
@@ -8,10 +9,12 @@ namespace MP.WindowsServices.ImagesManager.ImagesBatchCleaner
 {
     public class ImagesBatchFilesCleaner : IImagesBatchCleaner
     {
+        private readonly ISafeExecuteManager _safeExecuteManager;
         private readonly IFileSystemHelper _fileSystemHelper;
 
-        public ImagesBatchFilesCleaner(IFileSystemHelper fileSystemHelper)
+        public ImagesBatchFilesCleaner(ISafeExecuteManager safeExecuteManager, IFileSystemHelper fileSystemHelper)
         {
+            _safeExecuteManager = safeExecuteManager ?? throw new ArgumentNullException(nameof(safeExecuteManager));
             _fileSystemHelper = fileSystemHelper ?? throw new ArgumentNullException(nameof(fileSystemHelper));
         }
 
@@ -25,12 +28,15 @@ namespace MP.WindowsServices.ImagesManager.ImagesBatchCleaner
             if (!args.BatchFilePaths.Any())
                 throw new ArgumentException(nameof(args.BatchFilePaths), "The pathed batch contains no files.");
 
-            ServiceStateInfo.GetInstance().ServiceState = ServiceState.IsCleaningBatchFiles;
+            ServiceStateInfo.Instance.UpdateState(ServiceState.IsCleaningBatchFiles);
 
-            foreach (var file in args.BatchFilePaths)
+            _safeExecuteManager.ExecuteWithExceptionLogging(() =>
             {
-                _fileSystemHelper.FileHelper.DeleteFile(file);
-            }
+                foreach (var file in args.BatchFilePaths)
+                {
+                    _fileSystemHelper.FileHelper.DeleteFile(file);
+                }
+            });
         }
 
         #region Private methods

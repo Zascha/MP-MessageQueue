@@ -3,48 +3,38 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MP.WindowsServices.MQManager
 {
     public class RabbitMQSubscriber<T> : ISubscriber<T>
     {
         private readonly string _exchangeName;
+        private readonly RabbitMQChannel _channel;
 
-        public RabbitMQSubscriber(string exchangeName)
+        public RabbitMQSubscriber(RabbitMQChannel channel, string exchangeName)
         {
+            _channel = channel ?? throw new ArgumentNullException(nameof(channel));
             _exchangeName = !string.IsNullOrEmpty(exchangeName) ? exchangeName : throw new ArgumentNullException(nameof(exchangeName));
         }
 
         public void Receive(Action<T> procceddMessage)
         {
-            ReceiveAsync(procceddMessage).Wait();
-        }
+            var queueName = _channel.Channel.QueueDeclare().QueueName;
+            _channel.Channel.ExchangeDeclare(exchange: _exchangeName, type: ExchangeType.Fanout.ToString().ToLower());
+            _channel.Channel.QueueBind(queue: queueName, exchange: _exchangeName, routingKey: "");
 
-        public Task ReceiveAsync(Action<T> procceddMessage)
-        {
-            return Task.Run(() =>
+            var consumer = new EventingBasicConsumer(_channel.Channel);
+            consumer.Received += (model, ea) =>
             {
-                var factory = new ConnectionFactory() { HostName = RabbitMQConsts.Host };
-                using (var connection = factory.CreateConnection())
-                using (var channel = connection.CreateModel())
-                {
-                    var queueName = channel.QueueDeclare().QueueName;
-                    channel.ExchangeDeclare(exchange: _exchangeName, type: ExchangeType.Fanout.ToString().ToLower());
-                    channel.QueueBind(queue: queueName, exchange: _exchangeName, routingKey: "");
+                var message = GetFilePatchMessage(ea.Body);
+                procceddMessage(message);
+            };
 
-                    var consumer = new EventingBasicConsumer(channel);
-                    consumer.Received += (model, ea) =>
-                    {
-                        var message = GetFilePatchMessage(ea.Body);
-                        procceddMessage(message);
-                    };
+            _channel.Channel.BasicConsume(queue: queueName,
+                                          autoAck: true,
+                                          consumer: consumer);
 
-                    channel.BasicConsume(queue: queueName,
-                                         autoAck: true,
-                                         consumer: consumer);
-                }
-            });
+            while (!_channel.IsDisposed);
         }
 
         #region Private methods

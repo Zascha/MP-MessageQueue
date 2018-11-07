@@ -4,6 +4,8 @@ using MP.WindowsServices.CentralServerNotify;
 using MP.WindowsServices.Common;
 using MP.WindowsServices.Common.FileSystemHelpers;
 using MP.WindowsServices.Common.FileSystemHelpers.Interfaces;
+using MP.WindowsServices.Common.Logger;
+using MP.WindowsServices.Common.SafeExecuteManagers;
 using MP.WindowsServices.FileStorageObserver;
 using MP.WindowsServices.FileStorageObserver.Interfaces;
 using MP.WindowsServices.ImagesManager;
@@ -39,21 +41,34 @@ namespace MP.WindowsServices.DependencyResolver
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<FilePatchMessageFactory>().As<IFilePatchMessageFactory>();
+            builder.RegisterType<Logger>().As<ILogger>();
+            builder.RegisterType<SafeExecuteManager>().As<ISafeExecuteManager>();
+
+            builder.RegisterType<RabbitMQChannel>().AsSelf();
             builder.RegisterType<RabbitMQPublisher<FileBatchMessage>>().As<IPublisher<FileBatchMessage>>()
                                                                        .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeBatchesToProceedName);
-            builder.RegisterType<RabbitMQPublisher<ServiceStateInfo>>().As<IPublisher<ServiceStateInfo>>()
-                                                                       .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeServiceStateInfoName);
-
             builder.RegisterType<RabbitMQSubscriber<FileBatchMessage>>().As<ISubscriber<FileBatchMessage>>()
-                                                                       .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeBatchesToProceedName);
+                                                                        .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeBatchesToProceedName);
+
+            builder.RegisterType<RabbitMQPublisher<ServiceStateInfoMessage>>().As<IPublisher<ServiceStateInfoMessage>>()
+                                                                       .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeServiceStateInfoName);
+            builder.RegisterType<RabbitMQSubscriber<ServiceStateInfoMessage>>().As<ISubscriber<ServiceStateInfoMessage>>()
+                                                                        .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeServiceStateInfoName);
+
+            builder.RegisterType<RabbitMQPublisher<UpdateStateInfoMessage>>().As<IPublisher<UpdateStateInfoMessage>>()
+                                                                             .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeServiceStateInfoName);
+            builder.RegisterType<RabbitMQSubscriber<UpdateStateInfoMessage>>().As<ISubscriber<UpdateStateInfoMessage>>()
+                                                                              .WithParameter("exchangeName", RabbitMQExchangeConsts.ExchangeServiceStateInfoName);
 
             builder.RegisterType<ImagesBatchSubscriber>().As<IImagesBatchSubscriber>();
             builder.RegisterType<CentralServerNotifyer>().As<ICentralServerNotifyer>();
+            builder.RegisterType<SettingsManager>().As<ISettingsManager>();
+
+            builder.RegisterType<FilePatchMessageFactory>().As<IFilePatchMessageFactory>();
 
             builder.RegisterType<MigraDocPdfGenerator>().As<IPdfGenerator>();
             builder.RegisterType<LocalFileSystemHelper>().As<IFileSystemHelper>();
-            builder.RegisterType<LocalFileSystemObserver>().As<IFileStorageObserver>();            
+            builder.RegisterType<LocalFileSystemObserver>().As<IFileStorageObserver>();
 
             builder.RegisterType<ImagesBatchProvider>().As<IImagesBatchProvider>();
             builder.RegisterType<PdfImagesBatchHandler>().As<IImagesBatchHandler>();

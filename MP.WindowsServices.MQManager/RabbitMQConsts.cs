@@ -5,7 +5,7 @@
     public class RabbitMQConsts
     {
         public const string Host = "localhost";
-        public const int FilePatchSize = 10000;
+        public const int FilePatchSize = 100000;
     }
 
     public class RabbitMQExchangeConsts

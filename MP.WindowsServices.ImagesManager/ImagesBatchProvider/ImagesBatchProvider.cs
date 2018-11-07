@@ -5,18 +5,22 @@ using System.Text.RegularExpressions;
 using MP.WindowsServices.Common;
 using System.Timers;
 using MP.WindowsServices.ImagesManager.Interfaces;
+using MP.WindowsServices.Common.SafeExecuteManagers;
 
 namespace MP.WindowsServices.ImagesManager
 {
     public class ImagesBatchProvider : IImagesBatchProvider
     {
+        private readonly ISafeExecuteManager _safeExecuteManager;
         private readonly Regex _documentIndexNumberRegex;
 
         private List<string> _documentParts;
         private Timer _observingTimer;
 
-        public ImagesBatchProvider()
+        public ImagesBatchProvider(ISafeExecuteManager safeExecuteManager)
         {
+            _safeExecuteManager = safeExecuteManager ?? throw new ArgumentNullException(nameof(safeExecuteManager));
+
             _documentIndexNumberRegex = new Regex("[0-9]+", RegexOptions.Compiled);
             _documentParts = new List<string>();
         }
@@ -25,12 +29,15 @@ namespace MP.WindowsServices.ImagesManager
 
         public void HandlePreviousStepResult(object sender, FileStoragePipelineEventArgs args)
         {
-            ServiceStateInfo.GetInstance().ServiceState = ServiceState.IsProvidingBatch;
+            ServiceStateInfo.Instance.UpdateState(ServiceState.IsProvidingBatch);
 
-            if (IsFileFromNewPatch(args.FilePath))
+            _safeExecuteManager.ExecuteWithExceptionLogging(() => 
             {
-                ProvideNewBatch();
-            }
+                if (IsFileFromNewPatch(args.FilePath))
+                {
+                    ProvideNewBatch();
+                }
+            });
 
             _documentParts.Add(args.FilePath);
         }
