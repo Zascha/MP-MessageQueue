@@ -28,7 +28,7 @@ namespace MP.WindowsServices.ImagesManager.ImagesBatchHandlers
 
         public event EventHandler<FileStoragePipelineEventArgs> StepExecuted;
 
-        public void HandlePreviousStepResult(object sender, FileStoragePipelineEventArgs args)
+        public virtual void HandlePreviousStepResult(object sender, FileStoragePipelineEventArgs args)
         {
             if (args.BatchFilePaths == null)
                 throw new ArgumentNullException(nameof(args.BatchFilePaths));

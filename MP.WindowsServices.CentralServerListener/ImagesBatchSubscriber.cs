@@ -11,7 +11,7 @@ namespace MP.WindowsServices.CentralServerListener
 {
     public class ImagesBatchSubscriber : IImagesBatchSubscriber
     {
-        private const string ReceicedFilesDirectory = @"D:\ReceivedFiles";
+        private const string ReceivedFilesDirectory = @"D:\ReceivedFiles";
 
         private readonly ISafeExecuteManager _safeExecuteManager;
         private readonly ISubscriber<FileBatchMessage> _subscriber;
@@ -52,7 +52,7 @@ namespace MP.WindowsServices.CentralServerListener
                 if (HasAllAllPatchesBeenReceived(message))
                 {
                     var fileBytes = GetReceivedBytes(message);
-                    ProcceedReceivedBytes(message, fileBytes);
+                    ProceedReceivedBytes(message, fileBytes);
                 }
             });
         }
@@ -84,9 +84,9 @@ namespace MP.WindowsServices.CentralServerListener
             return bytes.ToArray();
         }
 
-        private void ProcceedReceivedBytes(FileBatchMessage message, byte[] fileBytes)
+        private void ProceedReceivedBytes(FileBatchMessage message, byte[] fileBytes)
         {
-            _fileSystemHelper.FileHelper.WriteBytesToFile(Path.Combine(ReceicedFilesDirectory, message.FileName), fileBytes.ToArray());
+            _fileSystemHelper.FileHelper.WriteBytesToFile(Path.Combine(ReceivedFilesDirectory, message.FileName), fileBytes.ToArray());
 
             _filesPatches.Remove(message.FileDataHash);
         }

@@ -5,13 +5,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EE8DD145-7129-4057-99F4-0ACC72526AF0}</ProjectGuid>
+    <ProjectGuid>{53C1610B-A22E-4DD9-94A9-C9C6D4E4E768}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MP.WindowsServices.FileStorageObserver</RootNamespace>
-    <AssemblyName>MP.WindowsServices.FileStorageObserver</AssemblyName>
+    <RootNamespace>MP.WindowsServices.AOP</RootNamespace>
+    <AssemblyName>MP.WindowsServices.AOP</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -33,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PostSharp, Version=6.0.31.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
       <HintPath>..\packages\PostSharp.Redist.6.0.31\lib\net45\PostSharp.dll</HintPath>
     </Reference>
@@ -47,21 +54,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IFileStorageObserver.cs" />
-    <Compile Include="LocalFileSystemObserver.cs" />
+    <Compile Include="CodeRewriting\LogMethodExceptionsAspect.cs" />
+    <Compile Include="CodeRewriting\LogMethodInfoAspect.cs" />
+    <Compile Include="LoggingData.cs" />
+    <Compile Include="DynamicProxy\LogMethodExceptionsInterceptor.cs" />
+    <Compile Include="DynamicProxy\LogMethodInfoInterceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MP.WindowsServices.AOP\MP.WindowsServices.AOP.csproj">
-      <Project>{53C1610B-A22E-4DD9-94A9-C9C6D4E4E768}</Project>
-      <Name>MP.WindowsServices.AOP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MP.WindowsServices.Common\MP.WindowsServices.Common.csproj">
-      <Project>{def86286-52f8-40a2-8bb1-68ff9a4887cb}</Project>
+      <Project>{DEF86286-52F8-40A2-8BB1-68FF9A4887CB}</Project>
       <Name>MP.WindowsServices.Common</Name>
     </ProjectReference>
   </ItemGroup>

@@ -1,11 +1,14 @@
 ﻿using Autofac;
+using Autofac.Extras.DynamicProxy;
+using Castle.DynamicProxy;
+using MP.WindowsServices.AOP;
 using MP.WindowsServices.CentralServerListener;
 using MP.WindowsServices.CentralServerNotify;
-using MP.WindowsServices.Common;
 using MP.WindowsServices.Common.FileSystemHelpers;
 using MP.WindowsServices.Common.FileSystemHelpers.Interfaces;
 using MP.WindowsServices.Common.Logger;
 using MP.WindowsServices.Common.SafeExecuteManagers;
+using MP.WindowsServices.Common.Serializer;
 using MP.WindowsServices.FileStorageObserver;
 using MP.WindowsServices.FileStorageObserver.Interfaces;
 using MP.WindowsServices.ImagesManager;
@@ -24,25 +27,18 @@ namespace MP.WindowsServices.DependencyResolver
     {
         private static IContainer _container;
 
-        public static IContainer Container
-        {
-            get
-            {
-                if(_container == null)
-                {
-                    _container = Resolve();
-                }
-
-                return _container;
-            }
-        }
+        public static IContainer Container => _container ?? (_container = Resolve());
 
         private static IContainer Resolve()
         {
             var builder = new ContainerBuilder();
 
             builder.RegisterType<Logger>().As<ILogger>();
+            builder.RegisterType<JsonSerializer>().As<ISerializer>();
             builder.RegisterType<SafeExecuteManager>().As<ISafeExecuteManager>();
+
+            builder.RegisterType<LogMethodExceptionsAspect>().PropertiesAutowired();
+            builder.RegisterType<LogMethodInfoAspect>().PropertiesAutowired();
 
             builder.RegisterType<RabbitMQChannel>().AsSelf();
             builder.RegisterType<RabbitMQPublisher<FileBatchMessage>>().As<IPublisher<FileBatchMessage>>()
@@ -70,8 +66,16 @@ namespace MP.WindowsServices.DependencyResolver
             builder.RegisterType<LocalFileSystemHelper>().As<IFileSystemHelper>();
             builder.RegisterType<LocalFileSystemObserver>().As<IFileStorageObserver>();
 
+            // Enable AOP approach
+            builder.RegisterType<PdfImagesBatchHandler>().As<IImagesBatchHandler>()
+                                                       .EnableInterfaceInterceptors()
+                                                       .InterceptedBy(typeof(LogMethodInfoInterceptor))
+                                                       .InterceptedBy(typeof(LogMethodExceptionsInterceptor));
+
+            builder.RegisterType<LogMethodInfoInterceptor>().AsSelf().Named<IInterceptor>("log-info");
+            builder.RegisterType<LogMethodExceptionsInterceptor>().AsSelf().Named<IInterceptor>("log-exceptions");
+
             builder.RegisterType<ImagesBatchProvider>().As<IImagesBatchProvider>();
-            builder.RegisterType<PdfImagesBatchHandler>().As<IImagesBatchHandler>();
             builder.RegisterType<ImagesBatchFilesCleaner>().As<IImagesBatchCleaner>();
             builder.RegisterType<ImagesBatchPublisher>().As<IImagesBatchPublisher>();
 

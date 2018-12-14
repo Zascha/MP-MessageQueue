@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using MP.WindowsServices.AOP;
 using MP.WindowsServices.Common;
 using MP.WindowsServices.Common.FileSystemHelpers.Interfaces;
 using MP.WindowsServices.Common.SafeExecuteManagers;
@@ -72,7 +73,7 @@ namespace MP.WindowsServices.FileStorageObserver
 
                     var watcher = new FileSystemWatcher(path);
                     watcher.EnableRaisingEvents = true;
-                    watcher.Created += new FileSystemEventHandler(OnFileAdded);
+                    watcher.Created += OnFileAdded;
 
                     _fileSystemWatchers.Add(watcher);
                 }
@@ -86,7 +87,6 @@ namespace MP.WindowsServices.FileStorageObserver
                 FileAdded?.Invoke(this, new FileStoragePipelineEventArgs() { FilePath = e.FullPath });
             }
         }
-
 
         #endregion
     }

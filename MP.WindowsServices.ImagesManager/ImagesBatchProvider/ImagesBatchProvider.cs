@@ -6,6 +6,7 @@ using MP.WindowsServices.Common;
 using System.Timers;
 using MP.WindowsServices.ImagesManager.Interfaces;
 using MP.WindowsServices.Common.SafeExecuteManagers;
+using MP.WindowsServices.AOP;
 
 namespace MP.WindowsServices.ImagesManager
 {
@@ -14,7 +15,7 @@ namespace MP.WindowsServices.ImagesManager
         private readonly ISafeExecuteManager _safeExecuteManager;
         private readonly Regex _documentIndexNumberRegex;
 
-        private List<string> _documentParts;
+        private readonly List<string> _documentParts;
         private Timer _observingTimer;
 
         public ImagesBatchProvider(ISafeExecuteManager safeExecuteManager)
@@ -27,6 +28,8 @@ namespace MP.WindowsServices.ImagesManager
 
         public event EventHandler<FileStoragePipelineEventArgs> StepExecuted;
 
+        [LogMethodInfoAspect]
+        [LogMethodExceptionsAspect]
         public void HandlePreviousStepResult(object sender, FileStoragePipelineEventArgs args)
         {
             ServiceStateInfo.Instance.UpdateState(ServiceState.IsProvidingBatch);
